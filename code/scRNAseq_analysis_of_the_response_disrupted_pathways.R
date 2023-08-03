@@ -292,12 +292,13 @@ res.R.NR.combined.monocytes.subsets <- unique(rbind(res.R.NR.Intermediate.monocy
 
 
 #Test knowledge based features based on stringdb
-
+#download human.name_2_string.tsv.gz from stringdb:https://version-11-0.string-db.org/cgi/download.pl?sessionId=GVeSdPCB96Ht
 converter <- read.table(gzfile(paste(dataDir, "/human.name_2_string.tsv.gz", sep=""), open="r"), header=F)
 
 converter$V2 <- as.character(converter$V2)
 converter$V3 <- as.character(converter$V3)
 
+#download 9606.protein.links.full.v11.0.txt.gz from stringdb: https://version-11-0.string-db.org/cgi/download.pl?sessionId=GVeSdPCB96Ht
 string.edges <- read.table(gzfile(paste(dataDir, "/9606.protein.links.full.v11.0.txt.gz", sep=""), open="r"), header=T)
 
 string.edges$protein1 <- as.character(string.edges$protein1)
