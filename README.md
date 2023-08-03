@@ -11,5 +11,6 @@ The analyses done in this study were divided in several reports as follows:
 | Disruption_Networks_functions | | |
 
 <br> 
+Whether non-responders' transcriptional profile reflects fundamental routes of IFX resistance, is essential for tailoring treatment. To elucidate molecular mechanisms of individual-specific pathways of treatment non-response, we devised a systematic framework we term ‘Disruption Networks’ which generates a new data-type to provide individual-level information of cell-centered changes in cross-feature relations. The generation of the new data-type relies on studying relations between features across a predefined reference population of individuals (i.e., a population level reference network), and then inferring how these relations differ (i.e., are disrupted) at the single sample level. The new data-type can serve as an input to multiple analyses including integration, differential signal detection, patient stratification based on disruption profile, assessment of disruption in functional modules and evaluation of individual’s molecular network behavior under specific perturbation effects or biological conditions <br> 
 
 ![image](https://github.com/ShiranVaniberg/Disruption_Networks_and_IFX_response/assets/51864609/2536d642-e7f7-4050-a189-112d8461f64a)
