@@ -10,9 +10,6 @@ The analyses done in this study were divided in several reports as follows:
 | Predictive_signature_and_validation | - GSE20690 <br> - GSE33377 <br> - GSE42296 <br> - in-house CD cohort- qPCR results- in GitHub data directory <br> -scRNAseq processed data <br> - CyTOF processed data <br> - Additional input files for the analysis in the data directory | Fig 4e, Fig 5 <br> S7, S8 |
 | Disruption_Networks_functions | | |
 
-**Raw data availability** <br>
-The microarray raw data generated in this study were deposited at the Gene Expression Omnibus database (https://www.ncbi.nlm.nih.gov/geo/) under accession number GSE186963. <br>
-The scRNA-seq data generated in this study are available at the SRA database (https://www.ncbi.nlm.nih.gov/sra/) under project accession number PRJNA779701. <br>
-The CyTOF raw data generated in this study are available at the FlowRepository database (http://flowrepository.org/) under accession number FR-FCM-Z4MQ. <br>
+<br> 
 
 ![image](https://github.com/ShiranVaniberg/Disruption_Networks_and_IFX_response/assets/51864609/2536d642-e7f7-4050-a189-112d8461f64a)
