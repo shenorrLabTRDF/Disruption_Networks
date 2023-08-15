@@ -659,8 +659,8 @@ cellMix.deconv.and.adjustment.function <- function(gset) {
   
   
   #using cellmix#
-  AG.V1.cellmix <- ged(gset, as.matrix(P.cellmix.sub.V1) ,method = 'correction')
-  AG.V1.cellmix <- log2(exprs(AG.V1.cellmix))
+  AG.V1.cellmix <- adj_func(as.matrix(P.cellmix.sub.V1), exprs(gset))
+  
   
   ##incorporate to expressionset
   gxeset_adjust <- gset

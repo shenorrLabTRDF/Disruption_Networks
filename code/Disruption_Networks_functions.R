@@ -43,6 +43,91 @@ substractReference <- function(object, id, y, ref = NULL, pheno = NULL, op = "-"
   object
 }
 
+
+#Compute differential analysis using mixed effect linear models
+
+lsmeansStats <- function(fit, model_stats = NULL){
+  
+  if( is.null(model_stats) ){
+    message("* Computing summary statistics")
+    model_stats <- sapply0(fit, lsmeans::lsmeans, pairwise ~ Visit, adjust = 'tukey')
+  }
+  
+  message("* Computing contrasts statistics")
+  fit_stats <- lapply(model_stats, function(x){
+    stat <- summary(x)
+    
+    # means
+    st <- stat$lsmeans
+    rn <- as.character(st[[1L]])
+    st <- as.matrix(st[-1L])
+    rownames(st) <- paste0(rn, '_0')
+    colnames(st)[1L] <- 'estimate'
+    m <- st
+    
+    # contrasts
+    st <- stat$contrasts
+    rn <- as.character(st[[1L]])
+    st <- as.matrix(st[-1L])
+    rownames(st) <- rn
+    contr <- st
+    
+    res <- rbind.fill.matrix(m, st)
+    rownames(res) <- c(rownames(m), rownames(st))
+    res
+  })
+  
+  class(fit_stats) <- 'cytnf_lsmeans'
+  fit_stats
+}
+
+sapply0 <- function(...) sapply(..., simplify = FALSE)
+
+fitLMER <- function (formula, data, variables = NULL, pattern = NULL, scale = FALSE, 
+          fit.only = FALSE, envir = parent.frame()) 
+{
+  pe <- envir
+  if (is(data, "ExpressionSet")) {
+    variables <- t(exprs(data))
+    data <- pData(data)
+  }
+  if (!is.null(variables)) 
+    vars <- variables
+  else if (!is.null(pattern)) 
+    vars <- grep(pattern, colnames(data))
+  else stop("Must provide either argument `variables` or `pattern`")
+  if (!is.null(dim(vars))) {
+    data <- cbind(data, vars)
+    vars <- colnames(vars)
+  }
+  else if (is.integer(vars)) 
+    vars <- colnames(data)[vars]
+  model <- paste0(as.character(formula), collapse = " ")
+  message("* Fitting model: ", model)
+  message("* Variables: ", str_out(vars, total = TRUE))
+  message("* Samples: ", str_out(rownames(data), total = TRUE))
+  GetLinearR = function(m_data) {
+    SigCls <- vars
+    if (scale) {
+      m_data[, vars] <- scale(m_data[, vars, drop = FALSE])
+    }
+    fit <- sapply0(SigCls, function(v) {
+      try(do.call(lme4::lmer, list(sprintf("%s %s", v, 
+                                           model), data = m_data), envir = pe), silent = TRUE)
+    })
+    i_errs <- which(sapply(fit, is.atomic))
+    if (length(i_errs)) {
+      print(head(fit[i_errs]))
+      fit <- fit[-i_errs]
+    }
+    if (fit.only) 
+      return(fit)
+    lsmeansStats(fit)
+  }
+  GetLinearR(data)
+}
+
+
 #Identification of features that changed over time using mixed effect linear models
 
 differential.over.time.func <- function(eset.file.name) {
@@ -224,6 +309,17 @@ subsampling.func <- function(samp.file.name, eset.file.name) {
   
   saveRDS(combined.perm.res, paste("combined.subsample.res", "rds", sep="."))
   return(combined.perm.res)
+}
+
+#Adjustment based on cell estimates
+adj_func <- function(P, eset_exp) {
+P_scaled <- apply(P, 1, function(x) scale(x, center = TRUE, scale = TRUE))
+fit.res <- lsfit(P_scaled, 2^t(eset_exp), wt = NULL, intercept = TRUE,
+                    yname = row.names(eset_exp))
+intercept <- fit.res$coefficients[row.names(fit.res$coefficients) %in% "Intercept",]
+intercept <- data.frame(intercept)
+AG.fitlm <- t(fit.res$residuals) + intercept$intercept 
+AG.fitlm <- log2(exprs(AG.fitlm)) #back to log2 scale
 }
 
 #Network propagation

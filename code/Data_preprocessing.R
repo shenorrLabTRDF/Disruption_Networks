@@ -719,22 +719,19 @@ P.sub.V1 <- P[,grep("V1", colnames(P))]
 Remicade_eset.GX.post.batch.correction.V1 <- exprs(Remicade_eset.GX.post.batch.correction)[,grep("V1", colnames(exprs(Remicade_eset.GX.post.batch.correction)))]
 
 #using cellmix#
-AG.V1 <- ged(Remicade_eset.GX.post.batch.correction.V1, P.sub.V1 ,method = 'correction')
-AG.V1 <- log2(exprs(AG.V1))
+AG.V1 <- adj_func(P.sub.V1, exprs(Remicade_eset.GX.post.batch.correction.V1))
 
 #for V2
 P.sub.V2 <- P[,grep("V2", colnames(P))]
 Remicade_eset.GX.post.batch.correction.V2 <- exprs(Remicade_eset.GX.post.batch.correction)[,grep("V2", colnames(exprs(Remicade_eset.GX.post.batch.correction)))]
+AG.V2 <- adj_func(P.sub.V2, exprs(Remicade_eset.GX.post.batch.correction.V2))
 
-AG.V2 <- ged(Remicade_eset.GX.post.batch.correction.V2, P.sub.V2 ,method = 'correction')
-AG.V2 <- log2(exprs(AG.V2))
 
 #for V3
 P.sub.V3 <- P[,grep("V3", colnames(P))]
 Remicade_eset.GX.post.batch.correction.V3 <- exprs(Remicade_eset.GX.post.batch.correction)[,grep("V3", colnames(exprs(Remicade_eset.GX.post.batch.correction)))]
 
-AG.V3 <- ged(Remicade_eset.GX.post.batch.correction.V3, P.sub.V3 ,method = 'correction')
-AG.V3 <- log2(exprs(AG.V3))
+AG.V3 <- adj_func(P.sub.V3, exprs(Remicade_eset.GX.post.batch.correction.V3))
 
 #combine all visits
 AG <- cbind(AG.V1, AG.V2, AG.V3)
